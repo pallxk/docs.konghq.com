@@ -137,8 +137,10 @@
   icon: /assets/images/icons/documentation/icn-vitals.svg
   url: /vitals
   items:
-    - text: Generating Vitals Reports
+    - text: View and Export Reports in ServiceHub
       url: /vitals/generate-reports
+    - text: Create and Manage Custom Reports
+      url: /vitals/custom-reports
 
 - title: Manage Plugins
   icon: /assets/images/icons/documentation/icn-api-plugins-color.svg
