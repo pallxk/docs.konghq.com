@@ -78,7 +78,7 @@ socket support which are not supported in the public project.
 StatsD exporter needed to configured with a set of mapping rules to translate
 the StatsD UDP events to Prometheus metrics. A default set of mapping rules can
 be downloaded at
-[statsd.rules.yaml](/gateway/{{page.kong_version}}/statsd.rules.yaml).
+[statsd.rules.yaml](/code-snippets/statsd.rules.yaml).
 Then start StatsD exporter with
 
 ```bash
@@ -158,6 +158,11 @@ export KONG_VITALS_STRATEGY=prometheus
 export KONG_VITALS_STATSD_ADDRESS=statsd-node:9125
 export KONG_VITALS_TSDB_ADDRESS=prometheus-node:9090
 ```
+
+{:.note}
+> **Note**: In Hybrid Mode, configure [`vitals_strategy`](/gateway/{{page.kong_version}}/reference/configuration/#vitals_strategy) 
+and [`vitals_tsdb_address`](/gateway/{{page.kong_version}}/reference/configuration/#vitals_tsdb_address) 
+on both the control plane and all data planes.
 
 Please update `statsd-node` and `prometheus-node` with the actual hostname that
 runs StatsD exporter and Prometheus.
