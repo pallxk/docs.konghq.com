@@ -135,12 +135,12 @@
 
 - title: Konnect Vitals
   icon: /assets/images/icons/documentation/icn-vitals.svg
-  url: /vitals
+  url: /vitals/
   items:
-    - text: View and Export Reports in ServiceHub
+    - text: Analyze Services and Routes
+      url: /vitals/analyze/
+    - text: Generate Reports
       url: /vitals/generate-reports
-    - text: Create and Manage Custom Reports
-      url: /vitals/custom-reports
 
 - title: Manage Plugins
   icon: /assets/images/icons/documentation/icn-api-plugins-color.svg
