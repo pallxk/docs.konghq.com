@@ -477,7 +477,7 @@ $("a[data-filter]").on("keypress", function(e) {
     }
   });
 
-  function activateNavTab(navtabTitle) {
+  function activateNavTab(navtabTitle, skipScroll) {
     // Toggle all nav tabs that match this title
     const text = navtabTitle.text();
     const search = $(".navtab-title").filter(function () {
@@ -491,11 +491,13 @@ $("a[data-filter]").on("keypress", function(e) {
     const screenTop = $(window).scrollTop();
     const screenBottom = $(window).scrollTop() + $(window).innerHeight();
 
-    // If the element isn't on screen, scroll to it
-    if (elementBottom < screenTop || elementTop > screenBottom){
-        $([document.documentElement, document.body]).animate({
-          scrollTop: elementTop - 120
-      }, 0);
+    if (!skipScroll){
+      // If the element isn't on screen, scroll to it
+      if (elementBottom < screenTop || elementTop > screenBottom){
+          $([document.documentElement, document.body]).animate({
+            scrollTop: elementTop - 120
+        }, 0);
+      }
     }
   }
 
@@ -563,8 +565,7 @@ $("a[data-filter]").on("keypress", function(e) {
     t.data('current', next);
     t.find("#switch-to-version").text(current);
 
-    $(".navtab-title[data-slug='"+slug+"']").first().click()
-    return false;
+    activateNavTab($(".navtab-title[data-slug='"+slug+"']").first(), true)
   });
 
   if (getParams.install == "oss" && ossEeToggle.is(":visible")) {
