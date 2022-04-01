@@ -162,12 +162,10 @@ module Jekyll
     end
 
     def createAliases(page, urlPath, offset, parts, latestRelease)
-      # Alias latest docs folder /x.x.x to /latest
       releasePath = parts[0 + offset]
       templateName = parts[1 + offset]
 
       if releasePath == latestRelease
-        page.data["alias"] = "/" + page.path.sub(releasePath, "latest").sub(/\..*$/, "")
         # templateName is nil if using single source generation and it's the index page
         if templateName == "index.md" || templateName.nil?
           # the / page
@@ -175,7 +173,7 @@ module Jekyll
           page.data["alias"] = ["#{urlPath}/latest", "#{urlPath}/#{latestRelease}", "#{urlPath}/#{latestRelease}/index.html"]
         elsif /index\.(md|html)/.match(parts.last)
           # all other nested index pages
-          page.data["alias"] = page.data["alias"].sub(/index/, "")
+          page.data["alias"] = page.url.sub(/index/, "")
         end
       end
     end
