@@ -542,6 +542,35 @@ $("a[data-filter]").on("keypress", function(e) {
     }
   }
 
+  // Handle EE/OSS Sidebar switcher
+  const ossEeToggle = $("#oss-ee-toggle");
+  if ($(".external-trigger").length){
+    ossEeToggle.show();
+  }
+
+  ossEeToggle.on("click", function(){
+    const t = $(this);
+    const current = t.data('current');
+    let next;
+    let slug;
+    if (current == "Enterprise" || !current){
+      next = "OSS";
+      slug = "kong-gateway-oss";
+    } else {
+      next = "Enterprise";
+      slug = "kong-gateway";
+    }
+    t.data('current', next);
+    t.find("#switch-to-version").text(current);
+
+    $(".navtab-title[data-slug='"+slug+"']").first().click()
+    return false;
+  });
+
+  if (getParams.install == "oss" && ossEeToggle.is(":visible")) {
+    ossEeToggle.click();
+  }
+
 
   /**
    * Expandable images
