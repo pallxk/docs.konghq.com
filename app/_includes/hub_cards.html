@@ -3,7 +3,6 @@
 {% assign extn_slug = path_array[2] %}
 {% assign extn_publisher = path_array[1] %}
 {% capture extn_id %}{{ extn_publisher }}_{{ extn_slug }}{% endcapture %}
-{% if filename == "index.md" and extn.type %}
   {% if include.header_icon %}
     {% assign header_icon = include.header_icon %}
   {% else %}
@@ -42,4 +41,3 @@
       </a>
     </div>
   </div>
-{% endif %}
