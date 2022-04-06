@@ -2,13 +2,14 @@ module PluginSingleSource
   class Generator < Jekyll::Generator
     priority :highest
     def generate(site)
-      Dir.glob('app/_data/extensions/kong-inc/vault-auth/versions.yml').each do|f|
+      Dir.glob('app/_data/extensions/*/*/versions.yml').each do|f|
         data = SafeYAML.load(File.read(f))
         createPages(data, site, f)
       end
     end
 
     def createPages(data, site, configPath)
+      max_version = data.map { |v| v['release'].gsub("-",".").gsub(/\.x/, ".0") }.sort_by { |v| Gem::Version.new(v) }.last
       data.each do |v,k|
         # Skip if a markdown file exists for this version
         name = configPath.gsub("app/_data/extensions/", "").gsub("/versions.yml","")
@@ -18,8 +19,11 @@ module PluginSingleSource
         plugin = name.split("/")
         source = "app/_hub/#{name}/_index.md"
 
+        current_version = v['release'].gsub("-",".").gsub(/\.x/, ".0")
+
         # Add the index page rendering if we're on the latest release too
-        if v['release'] == '3.0.0'
+        puts "#{plugin.join('/')} :: \tCurrent: #{current_version} / Max: #{max_version}"
+        if current_version == max_version
           site.pages << SingleSourcePage.new(site, v['release'], plugin[0], plugin[1], source, "index")
         else
           # Otherwise use the version as the filename
