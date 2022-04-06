@@ -46,7 +46,7 @@ module PluginSingleSource
         site.pages << page
 
         # Make sure we add the page to site.hub for later iteration
-        site.data['ssg_hub'] << page
+        site.data['ssg_hub'] << page if permalink == "index"
       end
     end
   end

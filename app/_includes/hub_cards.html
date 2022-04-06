@@ -18,7 +18,7 @@
               else %}open-source {% endif %}{%
                 else %}pub-not-konghq pub-{{extn_publisher}}{% endif %}">
     <div class="plugin-card">
-      <a href="{{ extn.url | remove: '/index' }}" title="{{ extn.name }}: {{ extn.desc }}">
+      <a href="{{ extn.url | remove: 'index.html' }}" title="{{ extn.name }}: {{ extn.desc }}">
         <div>
           <div class="name-desc">
             {% if extn.plus and extn_publisher == 'kong-inc' %}
