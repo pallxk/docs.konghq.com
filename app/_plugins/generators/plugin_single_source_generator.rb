@@ -22,7 +22,6 @@ module PluginSingleSource
         current_version = v['release'].gsub("-",".").gsub(/\.x/, ".0")
 
         # Add the index page rendering if we're on the latest release too
-        puts "#{plugin.join('/')} :: \tCurrent: #{current_version} / Max: #{max_version}"
         if current_version == max_version
           site.pages << SingleSourcePage.new(site, v['release'], plugin[0], plugin[1], source, "index")
         else
