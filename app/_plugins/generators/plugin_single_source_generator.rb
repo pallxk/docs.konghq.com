@@ -16,14 +16,21 @@ module PluginSingleSource
 
         # Otherwise duplicate index.md
         plugin = name.split("/")
-        source = "app/_hub/#{name}/index.md"
-        site.pages << SingleSourcePage.new(site, v['release'], plugin[0], plugin[1], source)
+        source = "app/_hub/#{name}/_index.md"
+
+        # Add the index page rendering if we're on the latest release too
+        if v['release'] == '3.0.0'
+          site.pages << SingleSourcePage.new(site, v['release'], plugin[0], plugin[1], source, "index")
+        else
+          # Otherwise use the version as the filename
+        site.pages << SingleSourcePage.new(site, v['release'], plugin[0], plugin[1], source, v['release'])
+        end
       end
     end
   end
 
   class SingleSourcePage < Jekyll::Page
-    def initialize(site, version, author, pluginName, sourcePath)
+    def initialize(site, version, author, pluginName, sourcePath, permalinkName)
       # Configure variables that Jekyll depends on
       @site = site
 
@@ -41,8 +48,11 @@ module PluginSingleSource
         @data = SafeYAML.load(Regexp.last_match(1))
       end
 
-      # The plugin hub uses version.html as the filename
-      @data['permalink'] = @dir + "/" + version + ".html"
+      @data["version"] = version
+
+      # The plugin hub uses version.html as the filename unless it's the most
+      # recent version, in which case it uses index
+      @data['permalink'] = @dir + "/" + permalinkName + ".html"
 
       # Set the layout if it's not already provided
       @data['layout'] = 'extension' unless self.data['layout']

@@ -15,12 +15,19 @@ module Jekyll
       contents = super
       page = context.environments.first["page"]
 
+      # Validate that there was at least one check
+      unless [:eq, :gte, :lte].any? {|k| @params.key?(k)}
+        ::Jekyll.logger.error "Invalid if_plugin_version usage: #{@params.to_json}"
+        return contents
+      end
+
       # Ideally we'd raise here and require a version for all files, but to reduce
       # breaking changes we'll just return the contents if there is no version set
-      ::Jekyll.logger.error "Missing version for #{page['path']}" unless page['version']
+      ::Jekyll.logger.debug "Missing version for #{page['path']}" unless page['version']
       return contents unless page['version']
 
-      page_version = page['version'].to_s.gsub(/\.x/, ".0")
+      page_version = page['version'].to_s.gsub(/\.x/, ".0").gsub("-",".")
+
       begin
         current_version = to_version(page_version) # Handle 3.0.x etc
       rescue => e
@@ -41,16 +48,13 @@ module Jekyll
         return "" unless current_version >= version
       end
 
-      # If there's a less than or equal to heck, fail if it's higher
+      # If there's a less than or equal to check, fail if it's higher
       if @params.key?(:lte)
         version = to_version(@params[:lte])
         return "" unless current_version <= version
       end
 
-      # Remove the leading and trailing whitespace and return
-      # We can't use .strip as that removes all leading whitespace,
-      # including indentation
-      contents.gsub(/^\n/,"").gsub(/\n$/,"") + "<hr />" + version.version + "/" + current_version.version
+      contents
     end
 
     def to_version(input)
@@ -63,6 +67,11 @@ module Jekyll
       if input.include?("minimum_version")
         input = "0.0.0"
       end
+
+      if input.include?("maximum_version")
+        input = "999.99.9"
+      end
+
       # Then convert to a Gem::Version for later comparison
       Gem::Version.new(input.gsub(/\.x$/, ".0"))
     end
@@ -70,7 +79,6 @@ module Jekyll
 end
 
 Liquid::Template.register_tag("if_plugin_version", Jekyll::PluginVersionIs)
-
 
 Jekyll::Hooks.register :pages, :pre_render do |page|
   # Replace double line breaks when using if_version when

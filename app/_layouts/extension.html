@@ -63,6 +63,7 @@ breadcrumbs:
       </tr>
     {% endif %}
     {% for field in page.params.config %}
+      {% if_plugin_version gte:field.minimum_version %}
       {% if field.group %}
     <tr><td colspan="2"><strong><br><br>{{ field.group | markdownify | strip_html }} {% if field.description %}<br><small>{{ field.description | markdownify | strip_html }}</small>{% endif %}</strong></td></tr>
       <tr><th>Form Parameter</th><th>Description</th></tr>
@@ -81,6 +82,7 @@ breadcrumbs:
         </td>
       </tr>
       {% endif %}
+      {% endif_plugin_version %}
     {% endfor %}
   </tbody>
 </table>
@@ -193,7 +195,7 @@ breadcrumbs:
         {% endif %}
 
         {% if page.params.examples != false %}
-          {% include_cached hub-examples.html params=page.params publisher=page.publisher name=page.name %}
+          {% include_cached hub-examples.html version=page.version params=page.params publisher=page.publisher name=page.name %}
         {% endif %}
 
         <h3 id="parameters">Parameters</h3>
